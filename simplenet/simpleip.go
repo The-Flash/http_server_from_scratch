@@ -8,7 +8,7 @@ const (
 	big     = 0xFFFFFF
 )
 
-var v4InV6Prefix = []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff}
+// var v4InV6Prefix = []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff}
 
 func ParseIP(s string) IP {
 	for i := 0; i < len(s); i++ {

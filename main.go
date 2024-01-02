@@ -28,12 +28,31 @@ func main() {
 	log.Printf("addr: http://%s:%d", ip, port)
 
 	for {
-		_, e := socket.Accept()
+		rw, e := socket.Accept()
 		log.Print()
 		log.Print()
 		log.Printf("Incoming connection")
 		if e != nil {
 			panic(e)
+		}
+		// Read request
+		log.Print("Reading request")
+		req, err := simplenet.ParseRequest(rw)
+		log.Print("request: ", req)
+		if err != nil {
+			panic(err)
+		}
+
+		// Write response
+		log.Print("Writing response")
+		simplenet.WriteString(rw, "HTTP/1.1 200 OK\r\n"+
+			"Content-Type: text/html; charset=utf-8\r\n"+
+			"Content-Length: 20\r\n"+
+			"\r\n"+
+			"<h1>hello world</h1>")
+		if err != nil {
+			log.Print(err.Error())
+			continue
 		}
 	}
 }
