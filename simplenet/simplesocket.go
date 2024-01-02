@@ -43,3 +43,26 @@ func (ns netSocket) Read(p []byte) (int, error) {
 	}
 	return n, err
 }
+
+func (ns netSocket) Write(p []byte) (int, error) {
+	n, err := syscall.Write(ns.fd, p)
+	if err != nil {
+		n = 0
+	}
+	return n, err
+}
+
+func (ns *netSocket) Accept() (*netSocket, error) {
+	nfd, _, err := syscall.Accept(ns.fd)
+	if err == nil {
+		syscall.CloseOnExec(nfd)
+	}
+	if err != nil {
+		return nil, err
+	}
+	return &netSocket{nfd}, nil
+}
+
+func (ns *netSocket) Close() error {
+	return syscall.Close(ns.fd)
+}
